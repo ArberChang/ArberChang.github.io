@@ -1,14 +1,14 @@
 ---
 title: Oracle游标测试
-date: 2020-01-11 19:20:35
-tags: 'Oracle'
-description:   生产中经常要用到 将从表插入一些数据,但是手动插入数量较为巨大.因而循环及判断语句在oracle匿名代码块中起到了很大的作用.
-categories: '文章'
+date: 2019-10-11 19:20:35
+categories: [技术,后端,数据库]
+tags: [Oracle]
+description:   生产中经常要用到 将从表插入一些数据,但是手动插入数量较为巨大.因而循环及判断语句在oracle匿名代码块中起到了很大的作用！
+ 
 ---
 
-## 测试场景
 
-#### 1\创建测试表
+#### 1、创建测试表
 
 ```sql
 
@@ -35,7 +35,7 @@ CREATE SEQUENCE seq_a_test
             NOCYCLE               -- 一直累加，不循环
             CACHE 10;
 ```
-#### 2\循环插入
+#### 2、循环插入
 ```sql
 
 --普通循环插入
@@ -77,7 +77,7 @@ begin
     commit;
 end;
 ```
-#### 2\删除数据
+#### 3、删除数据
 ```sql
 drop table a_test1;
 drop table a_test2;
