@@ -1,0 +1,63 @@
+# Menu
+menu:
+  # home: / || 首页
+  # archives: /archives || 归档
+  # about: /about || 关于
+
+# Preview
+preview:
+  enable:
+  model:
+
+# 文章封面图片
+post_image:
+
+# 欢迎图片
+welcome_image:
+
+# 欢迎标语
+welcome_title:
+
+# Favicon
+favicon:
+
+# 网站关键字
+keywords:
+
+# 版权信息
+copyright:
+
+# 插件
+fancybox:
+pjax:
+highlight:
+
+# CDN
+vendors:
+  jquery_js:
+  fancybox_js:
+  highlight_js:
+  pjax_js:
+  fancybox_css:
+  highlight_css:
+
+# Gitalk
+gitalk:
+  enable:
+  owner:
+  repo:
+  admin:
+  clientID:
+  clientSecret:
+
+# LeanCloud
+leancloud:
+  enable:
+  appId:
+  appKey:
+  serverURLs:
+
+# Custom
+custom:
+  head:
+  foot:
