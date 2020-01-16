@@ -2,27 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://b.wanty.cn/2020/01/15/springcloud-redis-lettuce/</loc>
-    
-    <lastmod>2020-01-16T04:32:18.546Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/2019/10/11/oracle-cursor/</loc>
-    
-    <lastmod>2020-01-16T04:31:49.324Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/2019/05/11/centos7-docker-proxy/</loc>
-    
-    <lastmod>2020-01-16T04:31:21.581Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://b.wanty.cn/photos/index.html</loc>
     
     <lastmod>2020-01-15T06:40:46.423Z</lastmod>
