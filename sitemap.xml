@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://b.wanty.cn/2020/01/15/springcloud-redis-lettuce/</loc>
+    
+    <lastmod>2020-01-16T04:32:18.546Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://b.wanty.cn/2019/10/11/oracle-cursor/</loc>
+    
+    <lastmod>2020-01-16T04:31:49.324Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://b.wanty.cn/2019/05/11/centos7-docker-proxy/</loc>
+    
+    <lastmod>2020-01-16T04:31:21.581Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://b.wanty.cn/photos/index.html</loc>
     
     <lastmod>2020-01-15T06:40:46.423Z</lastmod>
@@ -33,27 +54,6 @@
     <loc>http://b.wanty.cn/about/index.html</loc>
     
     <lastmod>2020-01-15T06:26:48.014Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/</loc>
-    
-    <lastmod>2020-01-15T06:26:48.013Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%B8%B8%E6%A0%87%E6%B5%8B%E8%AF%95/</loc>
-    
-    <lastmod>2020-01-15T06:26:48.012Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%9C%8D%E5%8A%A1%E5%99%A8/CentOs7-%E5%AE%89%E8%A3%85Docker-%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E5%A4%96%E7%BD%91/</loc>
-    
-    <lastmod>2020-01-15T06:26:48.011Z</lastmod>
     
   </url>
   
