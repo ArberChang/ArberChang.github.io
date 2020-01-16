@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Spring Cloud+Redis+Lettuce 单点模式和哨兵模式</title>
-    <url>/blog/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/</url>
+    <url>/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p>
 <p>它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。</p>
 <p>Redis主要分为Standalone（单例模式）和Sentinel（哨兵模式）具体这个本篇文章不过多介绍</p>
@@ -56,7 +56,7 @@
   </entry>
   <entry>
     <title>Oracle游标测试</title>
-    <url>/blog/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%B8%B8%E6%A0%87%E6%B5%8B%E8%AF%95/</url>
+    <url>/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%B8%B8%E6%A0%87%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<h4 id="1、创建测试表"><a href="#1、创建测试表" class="headerlink" title="1、创建测试表"></a>1、创建测试表</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> a_test1</span><br><span class="line">     (</span><br><span class="line">     	column_1 <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">     		<span class="keyword">constraint</span> a_test2_pk</span><br><span class="line">     			primary <span class="keyword">key</span>,</span><br><span class="line">     	column_2 <span class="built_in">varchar2</span>(<span class="number">12</span>)</span><br><span class="line">     )</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> a_test2</span><br><span class="line">     (</span><br><span class="line">     	column_1 <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">     		<span class="keyword">constraint</span> a_test2_pk</span><br><span class="line">     			primary <span class="keyword">key</span>,</span><br><span class="line">     	column_2 <span class="built_in">varchar2</span>(<span class="number">12</span>)</span><br><span class="line">     )</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">SEQUENCE</span> seq_a_test</span><br><span class="line">            <span class="keyword">INCREMENT</span> <span class="keyword">BY</span> <span class="number">1</span>  <span class="comment">-- 每次加几个</span></span><br><span class="line">            <span class="keyword">START</span> <span class="keyword">WITH</span> <span class="number">1399</span>       <span class="comment">-- 从1开始计数</span></span><br><span class="line">            <span class="keyword">NOMAXVALUE</span>        <span class="comment">-- 不设置最大值</span></span><br><span class="line">            <span class="keyword">NOCYCLE</span>               <span class="comment">-- 一直累加，不循环</span></span><br><span class="line">            <span class="keyword">CACHE</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 <h4 id="2、循环插入"><a href="#2、循环插入" class="headerlink" title="2、循环插入"></a>2、循环插入</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">--普通循环插入</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="number">1</span> .. <span class="number">100</span></span><br><span class="line">        <span class="keyword">loop</span></span><br><span class="line">            <span class="keyword">insert</span> <span class="keyword">into</span> A_TEST1(column_1, column_2) <span class="keyword">values</span> (seq_a_test.nextval,<span class="string">'aaa'</span>);</span><br><span class="line">        <span class="keyword">end</span> <span class="keyword">loop</span>;</span><br><span class="line">    <span class="keyword">commit</span> ;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a_test1;</span><br></pre></td></tr></table></figure>
 
@@ -76,7 +76,7 @@
   </entry>
   <entry>
     <title>CentOs7  安装Docker 并配置代理访问外网</title>
-    <url>/blog/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%9C%8D%E5%8A%A1%E5%99%A8/CentOs7-%E5%AE%89%E8%A3%85Docker-%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E5%A4%96%E7%BD%91/</url>
+    <url>/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%9C%8D%E5%8A%A1%E5%99%A8/CentOs7-%E5%AE%89%E8%A3%85Docker-%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E5%A4%96%E7%BD%91/</url>
     <content><![CDATA[<blockquote>
 <p>Linux version 3.10.0-693.el7.x86_64<br>docker为最新的即可</p>
 </blockquote>
