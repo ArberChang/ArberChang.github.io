@@ -51,30 +51,33 @@
   };
 </script>
 
-  <meta name="description" content="一个无聊喜欢搞点事情的软件工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Arber&#96;s blogs">
-<meta property="og:url" content="http://b.wanty.cn/index.html">
+  <meta name="description" content="Docker 在没用的时候觉得就是个虚拟机而已，真正用起来发现，这东西真香！ 喜欢的的不得了，文章总结了一些基于COS7的安装过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOs7  安装Docker 并配置代理访问外网">
+<meta property="og:url" content="http://b.wanty.cn/2019/05/11/centos7-docker-proxy/index.html">
 <meta property="og:site_name" content="Arber&#96;s blogs">
-<meta property="og:description" content="一个无聊喜欢搞点事情的软件工程师">
+<meta property="og:description" content="Docker 在没用的时候觉得就是个虚拟机而已，真正用起来发现，这东西真香！ 喜欢的的不得了，文章总结了一些基于COS7的安装过程。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-11T11:58:39.000Z">
+<meta property="article:modified_time" content="2020-01-16T05:06:13.663Z">
 <meta property="article:author" content="Arber Chang">
-<meta property="article:tag" content="有趣 有料 有心">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="linxu">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://b.wanty.cn/">
+<link rel="canonical" href="http://b.wanty.cn/2019/05/11/centos7-docker-proxy/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false
+    isHome: false,
+    isPost: true
   };
 </script>
 
-  <title>Arber`s blogs - 為天地立心，為生民立命，為往聖繼絕學，為萬世開太平！</title>
+  <title>CentOs7  安装Docker 并配置代理访问外网 | Arber`s blogs</title>
   
 
 
@@ -231,320 +234,10 @@
             
 
   <div class="posts-expand">
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://b.wanty.cn/2020/01/16/null/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/photo.gif">
-      <meta itemprop="name" content="Arber Chang">
-      <meta itemprop="description" content="一个无聊喜欢搞点事情的软件工程师">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Arber`s blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/16/null/" class="post-title-link" itemprop="url">test</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-16 13:02:55" itemprop="dateCreated datePublished" datetime="2020-01-16T13:02:55+08:00">2020-01-16</time>
-            </span>
-
-          
-            <span id="/2020/01/16/null/" class="post-meta-item leancloud_visitors" data-flag-title="test" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/01/16/null/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/16/null/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
   
   
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://b.wanty.cn/2020/01/15/springcloud-redis-lettuce/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/photo.gif">
-      <meta itemprop="name" content="Arber Chang">
-      <meta itemprop="description" content="一个无聊喜欢搞点事情的软件工程师">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Arber`s blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/15/springcloud-redis-lettuce/" class="post-title-link" itemprop="url">Spring Cloud+Redis+Lettuce 单点模式和哨兵模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-15 11:05:18" itemprop="dateCreated datePublished" datetime="2020-01-15T11:05:18+08:00">2020-01-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 13:06:13" itemprop="dateModified" datetime="2020-01-16T13:06:13+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/" itemprop="url" rel="index">
-                    <span itemprop="name">代码</span>
-                  </a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/01/15/springcloud-redis-lettuce/" class="post-meta-item leancloud_visitors" data-flag-title="Spring Cloud+Redis+Lettuce 单点模式和哨兵模式" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/01/15/springcloud-redis-lettuce/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/15/springcloud-redis-lettuce/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。 它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。 Redis主要分为Standalone（单例模式）和Sentinel（哨兵模式）具体这个本篇文章不过多介绍
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/01/15/springcloud-redis-lettuce/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://b.wanty.cn/2019/10/11/oracle-cursor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/photo.gif">
-      <meta itemprop="name" content="Arber Chang">
-      <meta itemprop="description" content="一个无聊喜欢搞点事情的软件工程师">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Arber`s blogs">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/11/oracle-cursor/" class="post-title-link" itemprop="url">Oracle游标测试</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-11 19:20:35" itemprop="dateCreated datePublished" datetime="2019-10-11T19:20:35+08:00">2019-10-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 13:06:13" itemprop="dateModified" datetime="2020-01-16T13:06:13+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/10/11/oracle-cursor/" class="post-meta-item leancloud_visitors" data-flag-title="Oracle游标测试" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/10/11/oracle-cursor/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/10/11/oracle-cursor/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          生产中经常要用到 将从表插入一些数据,但是手动插入数量较为巨大.因而循环及判断语句在oracle匿名代码块中起到了很大的作用！
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/11/oracle-cursor/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://b.wanty.cn/2019/05/11/centos7-docker-proxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -558,8 +251,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/11/centos7-docker-proxy/" class="post-title-link" itemprop="url">CentOs7  安装Docker 并配置代理访问外网</a>
+          CentOs7  安装Docker 并配置代理访问外网
         </h2>
 
         <div class="post-meta">
@@ -624,6 +316,7 @@
   </span>
   
   
+            <div class="post-description">Docker 在没用的时候觉得就是个虚拟机而已，真正用起来发现，这东西真香！ 喜欢的的不得了，文章总结了一些基于COS7的安装过程。</div>
 
         </div>
       </header>
@@ -634,24 +327,69 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          Docker 在没用的时候觉得就是个虚拟机而已，真正用起来发现，这东西真香！ 喜欢的的不得了，文章总结了一些基于COS7的安装过程。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/11/centos7-docker-proxy/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+        <blockquote>
+<p>Linux version 3.10.0-693.el7.x86_64<br>docker为最新的即可</p>
+</blockquote>
+<h3 id="一-配置yum代理"><a href="#一-配置yum代理" class="headerlink" title="一 配置yum代理"></a>一 配置yum代理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim  &#x2F;etc&#x2F;yum.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy&#x3D;http:&#x2F;&#x2F;172.20.36.11:80</span><br></pre></td></tr></table></figure>
+
+<h3 id="二-修改yum源为阿里源"><a href="#二-修改yum源为阿里源" class="headerlink" title="二 修改yum源为阿里源"></a>二 修改yum源为阿里源</h3><h4 id="进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum-y-install-wget）"><a href="#进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum-y-install-wget）" class="headerlink" title="进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum -y install wget）"></a>进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum -y install wget）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;yum.repos.d</span><br></pre></td></tr></table></figure>
+<h4 id="备份一下之前的配置文件。"><a href="#备份一下之前的配置文件。" class="headerlink" title="备份一下之前的配置文件。"></a>备份一下之前的配置文件。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv .&#x2F;CentOS-Base.repo .&#x2F;CentOS-Base.repo.bak</span><br></pre></td></tr></table></figure>
+<h4 id="下载阿里源或者163源"><a href="#下载阿里源或者163源" class="headerlink" title="下载阿里源或者163源"></a>下载阿里源或者163源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br><span class="line">wget http:&#x2F;&#x2F;mirrors.163.com&#x2F;.help&#x2F;CentOS7-Base-163.repo</span><br></pre></td></tr></table></figure>
+
+<h4 id="移动到源默认位置"><a href="#移动到源默认位置" class="headerlink" title="移动到源默认位置"></a>移动到源默认位置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv CentOS7-Base-163.repo &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo</span><br><span class="line">mv Centos-7.repo &#x2F;etc&#x2F;yum.repos.d&#x2F;CentOS-Base.repo</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行yum-clean-all-yum-makecache生成缓存即可，之后便可以使用yum安装软件了。"><a href="#运行yum-clean-all-yum-makecache生成缓存即可，之后便可以使用yum安装软件了。" class="headerlink" title="运行yum clean all , yum makecache生成缓存即可，之后便可以使用yum安装软件了。"></a>运行yum clean all , yum makecache生成缓存即可，之后便可以使用yum安装软件了。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+
+<h3 id="三-docker-安装报错-container-selinux-gt-2-9-解决"><a href="#三-docker-安装报错-container-selinux-gt-2-9-解决" class="headerlink" title="三 docker 安装报错 container-selinux &gt;= 2.9 解决"></a>三 docker 安装报错 container-selinux &gt;= 2.9 解决</h3><h4 id="阿里云上的epel源"><a href="#阿里云上的epel源" class="headerlink" title="阿里云上的epel源"></a>阿里云上的epel源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y  install epel-release</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装-container-selinux"><a href="#安装-container-selinux" class="headerlink" title="安装 container-selinux"></a>安装 container-selinux</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install container-selinux</span><br></pre></td></tr></table></figure>
+
+<h3 id="四-安装docker"><a href="#四-安装docker" class="headerlink" title="四 安装docker"></a>四 安装docker</h3><h4 id="安装docker服务"><a href="#安装docker服务" class="headerlink" title="安装docker服务"></a>安装docker服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install docker-ce</span><br></pre></td></tr></table></figure>
+<h4 id="配置docker源"><a href="#配置docker源" class="headerlink" title="配置docker源"></a>配置docker源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;docker&#x2F;deamon.json</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;registry-mirrors&quot;: [ &quot;https:&#x2F;&#x2F;registry.docker-cn.com&quot;],</span><br><span class="line">    &quot;insecure-registries&quot;: [ &quot;172.19.69.2:5000&quot;,&quot;172.22.0.35:5000&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置docker-http代理"><a href="#配置docker-http代理" class="headerlink" title="配置docker http代理"></a>配置docker http代理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;docker.service.d</span><br><span class="line">vim &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;docker.service.d&#x2F;http-proxy.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line"> Environment&#x3D;&quot;HTTP_PROXY&#x3D;http:&#x2F;&#x2F;username:password@126.15.15.1:8888&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="刷新源并重启"><a href="#刷新源并重启" class="headerlink" title="刷新源并重启"></a>刷新源并重启</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker </span><br><span class="line">systemctl show --property&#x3D;Environment docker</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置docker开启自动启动"><a href="#设置docker开启自动启动" class="headerlink" title="设置docker开启自动启动"></a>设置docker开启自动启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable docker</span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/linxu/" rel="tag"># linxu</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/11/oracle-cursor/" rel="next" title="Oracle游标测试">
+      Oracle游标测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
+    
   </article>
   
   
@@ -659,12 +397,10 @@
 
   </div>
 
-  
-
-
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -711,6 +447,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-配置yum代理"><span class="nav-number">1.</span> <span class="nav-text">一 配置yum代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二-修改yum源为阿里源"><span class="nav-number">2.</span> <span class="nav-text">二 修改yum源为阿里源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum-y-install-wget）"><span class="nav-number">2.1.</span> <span class="nav-text">进入yum源配置文件夹。（配置之前先看看有没有安装wget命令呢，没的话可以先用当前的yum源安装一下再说。yum -y install wget）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备份一下之前的配置文件。"><span class="nav-number">2.2.</span> <span class="nav-text">备份一下之前的配置文件。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载阿里源或者163源"><span class="nav-number">2.3.</span> <span class="nav-text">下载阿里源或者163源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#移动到源默认位置"><span class="nav-number">2.4.</span> <span class="nav-text">移动到源默认位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行yum-clean-all-yum-makecache生成缓存即可，之后便可以使用yum安装软件了。"><span class="nav-number">2.5.</span> <span class="nav-text">运行yum clean all , yum makecache生成缓存即可，之后便可以使用yum安装软件了。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-docker-安装报错-container-selinux-gt-2-9-解决"><span class="nav-number">3.</span> <span class="nav-text">三 docker 安装报错 container-selinux &gt;&#x3D; 2.9 解决</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#阿里云上的epel源"><span class="nav-number">3.1.</span> <span class="nav-text">阿里云上的epel源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装-container-selinux"><span class="nav-number">3.2.</span> <span class="nav-text">安装 container-selinux</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四-安装docker"><span class="nav-number">4.</span> <span class="nav-text">四 安装docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装docker服务"><span class="nav-number">4.1.</span> <span class="nav-text">安装docker服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置docker源"><span class="nav-number">4.2.</span> <span class="nav-text">配置docker源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置docker-http代理"><span class="nav-number">4.3.</span> <span class="nav-text">配置docker http代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#刷新源并重启"><span class="nav-number">4.4.</span> <span class="nav-text">刷新源并重启</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置docker开启自动启动"><span class="nav-number">4.5.</span> <span class="nav-text">设置docker开启自动启动</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -958,7 +695,7 @@ window.addEventListener('pjax:success', () => {
       quicklink({
         timeout: 3000,
         priority: true,
-        ignores: [uri => uri.includes('#'),uri => uri == 'http://b.wanty.cn/',]
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://b.wanty.cn/2019/05/11/centos7-docker-proxy/',]
       });
       });
   </script>
