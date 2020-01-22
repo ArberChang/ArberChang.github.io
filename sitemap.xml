@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://b.wanty.cn/photos/index.html</loc>
+    <loc>http://b.wanty.cn/series/index.html</loc>
     
-    <lastmod>2020-01-20T09:24:49.959Z</lastmod>
+    <lastmod>2020-01-22T05:43:32.642Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://b.wanty.cn/uncategorized/test/</loc>
+    <loc>http://b.wanty.cn/photos/index.html</loc>
     
-    <lastmod>2020-01-16T07:18:02.768Z</lastmod>
+    <lastmod>2020-01-22T05:43:32.641Z</lastmod>
     
   </url>
   
@@ -47,13 +47,6 @@
     <loc>http://b.wanty.cn/tags/index.html</loc>
     
     <lastmod>2020-01-15T06:26:48.020Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://b.wanty.cn/series/index.html</loc>
-    
-    <lastmod>2020-01-15T06:26:48.019Z</lastmod>
     
   </url>
   
