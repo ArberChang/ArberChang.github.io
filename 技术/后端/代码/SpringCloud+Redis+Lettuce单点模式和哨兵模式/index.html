@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="true">
+  <meta name="msvalidate.01" content="true">
+  <meta name="yandex-verification" content="true">
+  <meta name="baidu-site-verification" content="true">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://b.wanty.cn').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: true,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: true,
+    lazyload: true,
+    pangu: true,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。 它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。 Redis主要分为Standalone（单例模式）和Se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud+Redis+Lettuce 单点模式和哨兵模式">
+<meta property="og:url" content="http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Arber&#96;s blogs">
+<meta property="og:description" content="Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。 它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。 Redis主要分为Standalone（单例模式）和Se">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-15T03:05:18.000Z">
+<meta property="article:modified_time" content="2023-04-18T01:25:56.151Z">
+<meta property="article:author" content="Arber Chang">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="lettuce">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Spring Cloud+Redis+Lettuce 单点模式和哨兵模式 | Arber`s blogs</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Arber`s blogs" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Arber`s blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">為天地立心，為生民立命，為往聖繼絕學，為萬世開太平！</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-book"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-fw fa-clone"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-series">
+
+    <a href="/series" rel="section"><i class="fa fa-fw fa-reorder"></i>专题</a>
+
+  </li>
+        <li class="menu-item menu-item-photos">
+
+    <a href="/photos" rel="section"><i class="fa fa-fw fa-film"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0FyYmVyQ2hhbmc=" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Arber Chang">
+      <meta itemprop="description" content="一个无聊喜欢搞点事情的软件工程师">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Arber`s blogs">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          Spring Cloud+Redis+Lettuce 单点模式和哨兵模式
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-15 11:05:18" itemprop="dateCreated datePublished" datetime="2020-01-15T11:05:18+08:00">2020-01-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-04-18 09:25:56" itemprop="dateModified" datetime="2023-04-18T09:25:56+08:00">2023-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/" itemprop="url" rel="index">
+                    <span itemprop="name">代码</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span id="/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="Spring Cloud+Redis+Lettuce 单点模式和哨兵模式" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。 它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。 Redis主要分为Standalone（单例模式）和Sentinel（哨兵模式）具体这个本篇文章不过多介绍</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p>
+<p>它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。</p>
+<p>Redis主要分为Standalone（单例模式）和Sentinel（哨兵模式）具体这个本篇文章不过多介绍</p>
+<p><strong>详细请看：</strong></p>
+<ol>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1ODY4ODExL2FydGljbGUvZGV0YWlscy85MDI1NzA0NQ==" title="https://blog.csdn.net/qq_35868811/article/details/90257045">Redis哨兵（Sentinel）模式原理及搭建<i class="fa fa-external-link"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9qdWVqaW4uaW0vcG9zdC81YjdkMjI2YTZmYjlhMDFhMWUwMWZmNjQ=" title="https://juejin.im/post/5b7d226a6fb9a01a1e01ff64">深入剖析Redis系列(二) - Redis哨兵模式与高可用集群<i class="fa fa-external-link"></i></span></li>
+</ol>
+<h2 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h2><ul>
+<li>redis ： 3.2.1</li>
+<li>os ：Linux2.6.32-696.30.1.el6.x86_64x86_64</li>
+<li>数量：3 (三主三从)</li>
+<li>spring 2.1.* 或 spring2.0.*</li>
+</ul>
+<h2 id="配置集成："><a href="#配置集成：" class="headerlink" title="配置集成："></a>配置集成：</h2><p><strong>pom文件增加：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.2.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.commons&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;commons-pool2&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.6.1&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p><strong>java代码：</strong></p>
+<p>下面部分应用层依然次用spring2.0.*的使用方式，这些方法可以实现功能，但是缺少原子性。笔者不是特别推荐。如实在嫌项目升级麻烦，这个也是可以的。</p>
+<p>RedisTemplateConfig.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.commons.pool2.impl.GenericObjectPoolConfig;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.cache.annotation.CachingConfigurerSupport;</span><br><span class="line">import org.springframework.cache.annotation.EnableCaching;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line">import org.springframework.data.redis.connection.RedisConnectionFactory;</span><br><span class="line">import org.springframework.data.redis.connection.RedisNode;</span><br><span class="line">import org.springframework.data.redis.connection.RedisSentinelConfiguration;</span><br><span class="line">import org.springframework.data.redis.connection.RedisStandaloneConfiguration;</span><br><span class="line">import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;</span><br><span class="line">import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;</span><br><span class="line">import org.springframework.data.redis.core.RedisTemplate;</span><br><span class="line">import org.springframework.data.redis.serializer.StringRedisSerializer;</span><br><span class="line"></span><br><span class="line">import java.time.Duration;</span><br><span class="line">import java.util.HashSet;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * redis 配置文件</span><br><span class="line"> *&#x2F;</span><br><span class="line">@EnableCaching</span><br><span class="line">@Configuration</span><br><span class="line">public class RedisTemplateConfig extends CachingConfigurerSupport &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisPropertiesConfig redisPropertie;</span><br><span class="line">    @Autowired</span><br><span class="line">    private LettucePoolingClientConfiguration lettuceClientConfiguration;</span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisSentinelConfiguration redisSentinelConfiguration;</span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisStandaloneConfiguration redisStandaloneConfiguration;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * redis哨兵配置</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public RedisSentinelConfiguration redisSentinelConfiguration() &#123;</span><br><span class="line">        RedisSentinelConfiguration sentinelConfig &#x3D; new RedisSentinelConfiguration();</span><br><span class="line">        sentinelConfig.setMaster(redisPropertie.getMaster());</span><br><span class="line">        Set&lt;RedisNode&gt; sentinels &#x3D; new HashSet&lt;&gt;();</span><br><span class="line">        String[] host &#x3D; redisPropertie.getRedisNodes().split(&quot;,&quot;);</span><br><span class="line">        for (String redisHost : host) &#123;</span><br><span class="line">            String[] item &#x3D; redisHost.split(&quot;:&quot;);</span><br><span class="line">            String ip &#x3D; item[0].trim();</span><br><span class="line">            String port &#x3D; item[1].trim();</span><br><span class="line">            sentinels.add(new RedisNode(ip, Integer.parseInt(port)));</span><br><span class="line">        &#125;</span><br><span class="line">        sentinelConfig.setSentinels(sentinels);</span><br><span class="line">        sentinelConfig.setDatabase(redisPropertie.getDatabase());</span><br><span class="line">        &#x2F;&#x2F;standConfig.setPassword(RedisPassword.of(redisPropertie.getPassword())); &#x2F;&#x2F;redis 密码</span><br><span class="line">        return sentinelConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * redis 单节点配置</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public RedisStandaloneConfiguration redisStandaloneConfiguration() &#123;</span><br><span class="line">        RedisStandaloneConfiguration standConfig &#x3D; new RedisStandaloneConfiguration();</span><br><span class="line">        standConfig.setHostName(redisPropertie.getHost());</span><br><span class="line">        standConfig.setPort(redisPropertie.getPort());</span><br><span class="line">        standConfig.setDatabase(redisPropertie.getDatabase());</span><br><span class="line">        &#x2F;&#x2F;standConfig.setPassword(RedisPassword.of(redisPropertie.getPassword()));  &#x2F;&#x2F;redis 密码</span><br><span class="line">        return standConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * lettuce 连接池配置</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public LettucePoolingClientConfiguration lettucePoolConfig() &#123;</span><br><span class="line">        GenericObjectPoolConfig poolConfig &#x3D; new GenericObjectPoolConfig();</span><br><span class="line"></span><br><span class="line">        poolConfig.setMaxTotal(redisPropertie.getMaxActive());</span><br><span class="line">        poolConfig.setMinIdle(redisPropertie.getMinIdle());</span><br><span class="line">        poolConfig.setMaxIdle(redisPropertie.getMaxIdle());</span><br><span class="line">        poolConfig.setMaxWaitMillis(redisPropertie.getMaxWait());</span><br><span class="line">        poolConfig.setTestOnCreate(redisPropertie.getTestOnCreate());</span><br><span class="line">        poolConfig.setTestOnBorrow(redisPropertie.getTestOnBorrow());</span><br><span class="line">        poolConfig.setTestOnReturn(redisPropertie.getTestOnReturn());</span><br><span class="line">        poolConfig.setTestWhileIdle(redisPropertie.getTestWhileIdle());</span><br><span class="line">        poolConfig.setNumTestsPerEvictionRun(redisPropertie.getNumTestsPerEvictionRun());</span><br><span class="line">        poolConfig.setTimeBetweenEvictionRunsMillis(redisPropertie.getTimeBetweenEvictionRunsMillis());</span><br><span class="line">        poolConfig.setMinEvictableIdleTimeMillis(redisPropertie.getMinEvictableIdleTimeMills());</span><br><span class="line"></span><br><span class="line">        return LettucePoolingClientConfiguration.builder()</span><br><span class="line">                .poolConfig(poolConfig)</span><br><span class="line">                .commandTimeout(Duration.ofSeconds(redisPropertie.getCommandTimeout()))</span><br><span class="line">                .shutdownTimeout(Duration.ofMillis(redisPropertie.getShutdownTimeout()))</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * lettuce 连接工厂</span><br><span class="line">     *</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public RedisConnectionFactory redisConnectionFactory() &#123;</span><br><span class="line">        LettuceConnectionFactory factory;</span><br><span class="line">        if (redisPropertie.getCluster()) &#123;</span><br><span class="line">            factory &#x3D; new LettuceConnectionFactory(redisSentinelConfiguration, lettuceClientConfiguration);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            factory &#x3D; new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);</span><br><span class="line">        &#125;</span><br><span class="line">        return factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public RedisTemplate&lt;String, Object&gt; redisTemplate() &#123;</span><br><span class="line">        &#x2F;&#x2F;StringRedisTemplate的构造方法中默认设置了stringSerializer</span><br><span class="line">        RedisTemplate&lt;String, Object&gt; template &#x3D; new RedisTemplate&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        template.setConnectionFactory(redisConnectionFactory());</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;设置开启事务</span><br><span class="line">        &#x2F;&#x2F;template.setEnableTransactionSupport(true);</span><br><span class="line">        &#x2F;&#x2F;set key serializer</span><br><span class="line">        StringRedisSerializer stringRedisSerializer &#x3D; new StringRedisSerializer();</span><br><span class="line">        template.setKeySerializer(stringRedisSerializer);</span><br><span class="line">        template.setHashKeySerializer(stringRedisSerializer);</span><br><span class="line">        template.setHashValueSerializer(stringRedisSerializer);</span><br><span class="line"></span><br><span class="line">        template.afterPropertiesSet();</span><br><span class="line">        return template;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>RedisPropertiesConfig.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.beans.factory.annotation.Value;</span><br><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">import lombok.Data;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * redis 属性配置</span><br><span class="line"> * @author Arber</span><br><span class="line"> * @date 2019年5月12日 上午9:42:54</span><br><span class="line"> * @version 1.0</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Data</span><br><span class="line">@Component</span><br><span class="line">@Configuration</span><br><span class="line">public class RedisPropertiesConfig &#123;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.sentinel.nodes&#125;&quot;)</span><br><span class="line">    private String redisNodes;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.sentinel.master&#125;&quot;)</span><br><span class="line">    private String master;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.sentinel.database:0&#125;&quot;)</span><br><span class="line">    private int database;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F; redis pool配置</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.max_idle:500&#125;&quot;)</span><br><span class="line">    private Integer maxIdle;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.min_idle:200&#125;&quot;)</span><br><span class="line">    private Integer minIdle;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.max_active:2000&#125;&quot;)</span><br><span class="line">    private Integer maxActive;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.max_wait:5000&#125;&quot;)</span><br><span class="line">    private Integer maxWait;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.numTestsPerEvictionRun:200&#125;&quot;)</span><br><span class="line">    private Integer numTestsPerEvictionRun;&#x2F;&#x2F;一次最多evict的pool里的jedis实例个数</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.timeBetweenEvictionRunsMillis:6000&#125;&quot;)</span><br><span class="line">    private Integer timeBetweenEvictionRunsMillis;&#x2F;&#x2F;test idle 线程的时间间隔\</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.minEvictableIdleTimeMills:60000&#125;&quot;)</span><br><span class="line">    private Integer minEvictableIdleTimeMills;&#x2F;&#x2F;连接池中连接可空闲的时间,毫秒</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.test-on-create:false&#125;&quot;)</span><br><span class="line">    private Boolean testOnCreate;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.test-on-borrow:true&#125;&quot;)</span><br><span class="line">    private Boolean testOnBorrow;&#x2F;&#x2F;在获取连接的时候检查有效性</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.test-on-return:false&#125;&quot;)</span><br><span class="line">    private Boolean testOnReturn;&#x2F;&#x2F;当调用return Object方法时，是否进行有效性检查</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.test-while-idle:true&#125;&quot;)</span><br><span class="line">    private Boolean testWhileIdle;&#x2F;&#x2F;在空闲时检查有效性</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.commandTimeout:60&#125;&quot;)</span><br><span class="line">    private Integer commandTimeout;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.pool.shutdownTimeout:100&#125;&quot;)</span><br><span class="line">    private Integer shutdownTimeout;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F; redis 单节点配置，兼容集群问题</span><br><span class="line">    @Value(&quot;$&#123;horder.redis.cluster:true&#125;&quot;)</span><br><span class="line">    private Boolean cluster; &#x2F;&#x2F; 是否配置集群</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.host:172.22.0.22&#125;&quot;)</span><br><span class="line">    private String host;</span><br><span class="line">    @Value(&quot;$&#123;spring.redis.port:26379&#125;&quot;)</span><br><span class="line">    private Integer port;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>RedisLock.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">import lombok.extern.slf4j.Slf4j;</span><br><span class="line">import org.springframework.data.redis.connection.RedisStringCommands;</span><br><span class="line">import org.springframework.data.redis.connection.ReturnType;</span><br><span class="line">import org.springframework.data.redis.core.RedisCallback;</span><br><span class="line">import org.springframework.data.redis.core.RedisTemplate;</span><br><span class="line">import org.springframework.data.redis.core.types.Expiration;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">import javax.annotation.Resource;</span><br><span class="line">import java.nio.charset.Charset;</span><br><span class="line">import java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * @Description: 分布式锁工具类</span><br><span class="line"> * @Author:Arber</span><br><span class="line"> * @CreateDate: 2019年5月7日13:25:47</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Component</span><br><span class="line">@Slf4j</span><br><span class="line">public class RedisLock &#123;</span><br><span class="line">    @Resource</span><br><span class="line">    private RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    public static final String UNLOCK_LUA;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 释放锁脚本，原子操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    static &#123;</span><br><span class="line">        StringBuilder sb &#x3D; new StringBuilder();</span><br><span class="line">        sb.append(&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) &#x3D;&#x3D; ARGV[1] &quot;);</span><br><span class="line">        sb.append(&quot;then &quot;);</span><br><span class="line">        sb.append(&quot;    return redis.call(\&quot;del\&quot;,KEYS[1]) &quot;);</span><br><span class="line">        sb.append(&quot;else &quot;);</span><br><span class="line">        sb.append(&quot;    return 0 &quot;);</span><br><span class="line">        sb.append(&quot;end &quot;);</span><br><span class="line">        UNLOCK_LUA &#x3D; sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取分布式锁，原子操作</span><br><span class="line">     * @param lockKey</span><br><span class="line">     * @param requestId 唯一ID, 可以使用UUID.randomUUID().toString();</span><br><span class="line">     * @param expire</span><br><span class="line">     * @param timeUnit</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean tryLock(String lockKey, String requestId, long expire, TimeUnit timeUnit) &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            RedisCallback&lt;Boolean&gt; callback &#x3D; (connection) -&gt; &#123;</span><br><span class="line">                return connection.set(lockKey.getBytes(Charset.forName(&quot;UTF-8&quot;)), requestId.getBytes(Charset.forName(&quot;UTF-8&quot;)), Expiration.seconds(timeUnit.toSeconds(expire)), RedisStringCommands.SetOption.SET_IF_ABSENT);</span><br><span class="line">            &#125;;</span><br><span class="line">            return (Boolean)redisTemplate.execute(callback);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            log.error(&quot;redis lock error.&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 释放锁</span><br><span class="line">     * @param lockKey</span><br><span class="line">     * @param requestId 唯一ID</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean releaseLock(String lockKey, String requestId) &#123;</span><br><span class="line">        RedisCallback&lt;Boolean&gt; callback &#x3D; (connection) -&gt; &#123;</span><br><span class="line">            return connection.eval(UNLOCK_LUA.getBytes(), ReturnType.BOOLEAN ,1, lockKey.getBytes(Charset.forName(&quot;UTF-8&quot;)), requestId.getBytes(Charset.forName(&quot;UTF-8&quot;)));</span><br><span class="line">        &#125;;</span><br><span class="line">        return (Boolean)redisTemplate.execute(callback);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取Redis锁的value值</span><br><span class="line">     * @param lockKey</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public String getLock(String lockKey) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            RedisCallback&lt;String&gt; callback &#x3D; (connection) -&gt; &#123;</span><br><span class="line">                return new String(connection.get(lockKey.getBytes()), Charset.forName(&quot;UTF-8&quot;));</span><br><span class="line">            &#125;;</span><br><span class="line">            return (String)redisTemplate.execute(callback);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            log.error(&quot;get redis occurred an exception&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>RedisCacheClient.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import lombok.extern.slf4j.Slf4j;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.data.redis.core.RedisConnectionUtils;</span><br><span class="line">import org.springframework.data.redis.core.RedisTemplate;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line">import org.springframework.transaction.annotation.Transactional;</span><br><span class="line"></span><br><span class="line">import java.util.Date;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Redis处理器</span><br><span class="line"> *</span><br><span class="line"> * @author Arber</span><br><span class="line"> * @version 1.0</span><br><span class="line"> * @date 2019年5月21日 下午4:52:06</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Slf4j</span><br><span class="line">@Component</span><br><span class="line">public class RedisCacheClient &#123;</span><br><span class="line">    private static final int MAX_REPLAY &#x3D; 3;</span><br><span class="line">    private static final String UPDATE_COLUMN_NAME &#x3D; &quot;Update&quot;;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 得到缓存值,直接得到缓存值(不逆序列化),不存在则返回空字符串</span><br><span class="line">     *</span><br><span class="line">     * @param tableName  表名</span><br><span class="line">     * @param columnName 列名</span><br><span class="line">     * @param primary    主健</span><br><span class="line">     * @param clazz      返回结果类</span><br><span class="line">     * @param &lt;T&gt;        泛型</span><br><span class="line">     * @return 缓存值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public &lt;T&gt; T get(String tableName, String columnName, String primary, Class&lt;? extends T&gt; clazz) &#123;</span><br><span class="line">        Map&lt;Object, Object&gt; values &#x3D; redisTemplate.opsForHash().entries(createKey(tableName, columnName, primary));</span><br><span class="line">        return values.containsKey(columnName) ? AirJsonUtil.parseObject(values.get(columnName).toString(), clazz) : null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 解压缩并转换对象</span><br><span class="line">     * 得到缓存值,直接得到缓存值(不逆序列化),不存在则返回空字符串</span><br><span class="line">     *</span><br><span class="line">     * @param tableName</span><br><span class="line">     * @param columnName</span><br><span class="line">     * @param primary</span><br><span class="line">     * @param clazz</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public &lt;T&gt; T getUnzip(String tableName, String columnName, String primary, Class&lt;? extends T&gt; clazz) &#123;</span><br><span class="line">        Map&lt;Object, Object&gt; values &#x3D; redisTemplate.opsForHash().entries(createKey(tableName, columnName, primary));</span><br><span class="line">        if (!values.containsKey(columnName)) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        String value &#x3D; values.get(columnName).toString();</span><br><span class="line">        &#x2F;&#x2F;解压缩并转换对象</span><br><span class="line">        return AirJsonUtil.parseObject(AirStringUtil.uncompress(value), clazz);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 得到缓存值,直接得到缓存值(不逆序列化),不存在则返回空字符串</span><br><span class="line">     *</span><br><span class="line">     * @param tableName  表名</span><br><span class="line">     * @param columnName 列名</span><br><span class="line">     * @param primary    主健</span><br><span class="line">     * @return 缓存值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public String get(String tableName, String columnName, String primary) &#123;</span><br><span class="line">        Map&lt;Object, Object&gt; values &#x3D; redisTemplate.opsForHash().entries(createKey(tableName, columnName, primary));</span><br><span class="line">        return values.containsKey(columnName) ? values.get(columnName).toString() : null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 删除键</span><br><span class="line">     *</span><br><span class="line">     * @param tableName  表名</span><br><span class="line">     * @param columnName 列名</span><br><span class="line">     * @param primary    主健</span><br><span class="line">     * @return 缓存值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Boolean remove(String tableName, String columnName, String primary) &#123;</span><br><span class="line">        return redisTemplate.delete(createKey(tableName, columnName, primary));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 更新缓存值</span><br><span class="line">     *</span><br><span class="line">     * @param tableName      表名</span><br><span class="line">     * @param columnName     列名</span><br><span class="line">     * @param primary        主健</span><br><span class="line">     * @param value          缓存值</span><br><span class="line">     * @param updateDateTime 更新时间</span><br><span class="line">     * @param expireTime     过期时间</span><br><span class="line">     * @param replay         重试次数</span><br><span class="line">     * @return 更新结果</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Boolean updateValueMulti(String tableName, String columnName, String primary, String value, Date updateDateTime, Date expireTime,</span><br><span class="line">                                    int replay) &#123;</span><br><span class="line">        if (replay &gt;&#x3D; MAX_REPLAY) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        String key &#x3D; createKey(tableName, columnName, primary);</span><br><span class="line">        Map&lt;Object, Object&gt; valuesMap &#x3D; redisTemplate.opsForHash().entries(key);</span><br><span class="line">        if (valuesMap.containsKey(UPDATE_COLUMN_NAME)) &#123;</span><br><span class="line">            if (Long.parseLong((String) valuesMap.get(UPDATE_COLUMN_NAME)) &gt;&#x3D; updateDateTime.getTime()) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            redisTemplate.watch(key);</span><br><span class="line">        &#125;</span><br><span class="line">        if (valuesMap.isEmpty()) &#123;</span><br><span class="line">            valuesMap &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        valuesMap.put(columnName, value);</span><br><span class="line">        valuesMap.put(UPDATE_COLUMN_NAME, String.valueOf(updateDateTime.getTime()));</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 增加事务支持(在RedisSentinelConfig里有事务支持配置)</span><br><span class="line">        redisTemplate.setEnableTransactionSupport(true);</span><br><span class="line">        redisTemplate.multi();</span><br><span class="line">        redisTemplate.opsForHash().putAll(key, valuesMap);</span><br><span class="line">        redisTemplate.expireAt(key, expireTime);</span><br><span class="line">        List&lt;Object&gt; rs &#x3D; redisTemplate.exec();</span><br><span class="line">        RedisConnectionUtils.unbindConnection(redisTemplate.getConnectionFactory());</span><br><span class="line">        if (rs &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return updateValueMulti(tableName, columnName, primary, value, updateDateTime, expireTime, ++replay);</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 更新缓存值</span><br><span class="line">     *</span><br><span class="line">     * @param tableName      表名</span><br><span class="line">     * @param columnName     列名</span><br><span class="line">     * @param primary        主健</span><br><span class="line">     * @param value          缓存值</span><br><span class="line">     * @param updateDateTime 更新时间</span><br><span class="line">     * @param expireTime     过期时间</span><br><span class="line">     * @param replay         重试次数</span><br><span class="line">     * @return 更新结果</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Transactional(rollbackFor &#x3D; Exception.class)</span><br><span class="line">    public Boolean updateValue(String tableName, String columnName, String primary, String value, Date updateDateTime, Date expireTime, int replay) &#123;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 增加事务支持(在RedisSentinelConfig里有事务支持配置)</span><br><span class="line">        redisTemplate.setEnableTransactionSupport(true);</span><br><span class="line">        if (replay &gt;&#x3D; MAX_REPLAY) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        String key &#x3D; createKey(tableName, columnName, primary);</span><br><span class="line">        Map&lt;Object, Object&gt; valuesMap &#x3D; redisTemplate.opsForHash().entries(key);</span><br><span class="line">        if (valuesMap.containsKey(UPDATE_COLUMN_NAME)) &#123;</span><br><span class="line">            if (Long.parseLong((String) valuesMap.get(UPDATE_COLUMN_NAME)) &gt;&#x3D; updateDateTime.getTime()) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if (valuesMap.isEmpty()) &#123;</span><br><span class="line">            valuesMap &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        valuesMap.put(columnName, value);</span><br><span class="line">        valuesMap.put(UPDATE_COLUMN_NAME, String.valueOf(updateDateTime.getTime()));</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 更新数据</span><br><span class="line">        redisTemplate.opsForHash().putAll(key, valuesMap);</span><br><span class="line">        return redisTemplate.expireAt(key, expireTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 创建Key关键表列关键字</span><br><span class="line">     *</span><br><span class="line">     * @param tableName  表名</span><br><span class="line">     * @param columnName 列名</span><br><span class="line">     * @param primary    主健</span><br><span class="line">     * @return 关键字</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private String createKey(String tableName, String columnName, String primary) &#123;</span><br><span class="line">        return tableName + &quot;:&quot; + primary + &quot;:&quot; + columnName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 替换方法 setEntryIfNotExists();</span><br><span class="line">     * Only set the key if it does not already exist</span><br><span class="line">     *</span><br><span class="line">     * @param key</span><br><span class="line">     * @param ticketNo NX -- Only set the key if it does not already exist.</span><br><span class="line">     *                 XX -- Only set the key if it already exist</span><br><span class="line">     * @param expx     EX|PX, expire time units, EX&#x3D;seconds; PX &#x3D; milliseconds</span><br><span class="line">     * @param time     过期时间</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Deprecated</span><br><span class="line">    public boolean setEntryIfNotExists(String key, String ticketNo, String expx, int time) &#123;</span><br><span class="line"></span><br><span class="line">        TimeUnit unit &#x3D; null;</span><br><span class="line"></span><br><span class="line">        switch (expx) &#123;</span><br><span class="line">            case &quot;EX&quot;:</span><br><span class="line">                unit &#x3D; TimeUnit.SECONDS;</span><br><span class="line">                break;</span><br><span class="line">            case &quot;PX&quot;:</span><br><span class="line">                unit &#x3D; TimeUnit.MILLISECONDS;</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                unit &#x3D; TimeUnit.SECONDS;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return redisTemplate.opsForValue().setIfAbsent(key, ticketNo, time, unit);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 通过redis过期时间实现限制QPS</span><br><span class="line">     *</span><br><span class="line">     * @param key      主键</span><br><span class="line">     * @param ticketNo 票号</span><br><span class="line">     * @param time     过期时间</span><br><span class="line">     * @param expx     时间单位 TimeUnit</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean setEntryIfNotExists(String key, String ticketNo, int time, TimeUnit expx) &#123;</span><br><span class="line"></span><br><span class="line">        return redisTemplate.opsForValue().setIfAbsent(key, ticketNo, time, expx);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 释放redis链接</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void unbindConnection() &#123;</span><br><span class="line"></span><br><span class="line">        RedisConnectionUtils.unbindConnection(redisTemplate.getConnectionFactory());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring Data JPA为我们提供了下面的Serializer：GenericToStringSerializer、Jackson2JsonRedisSerializer、JacksonJsonRedisSerializer、JdkSerializationRedisSerializer、OxmSerializer、StringRedisSerializer。由于兼容旧的数据本文没有采用（个人比较喜欢下面这个）。<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hpYW9seXVoMTIzL2FydGljbGUvZGV0YWlscy83ODY4MjIwMA==" title="https://blog.csdn.net/xiaolyuh123/article/details/78682200">不同的对比  <i class="fa fa-external-link"></i></span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public RedisTemplate&lt;String, Object&gt; redisTemplate() &#123;</span><br><span class="line">    &#x2F;&#x2F;创建Json序列化对象</span><br><span class="line">    Jackson2JsonRedisSerializer&lt;Object&gt; jackson2JsonRedisSerializer &#x3D; new Jackson2JsonRedisSerializer&lt;&gt;(Object.class);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;解决查询缓存转换异常的问题</span><br><span class="line">    ObjectMapper om &#x3D; new ObjectMapper();</span><br><span class="line">    om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);</span><br><span class="line">    om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);</span><br><span class="line">    jackson2JsonRedisSerializer.setObjectMapper(om);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 将默认序列化改为Jackson2JsonRedisSerializer序列化</span><br><span class="line">    RedisTemplate&lt;String, Object&gt; template &#x3D; new RedisTemplate&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F; key序列化</span><br><span class="line">    template.setKeySerializer(jackson2JsonRedisSerializer);</span><br><span class="line">    &#x2F;&#x2F; value序列化</span><br><span class="line">    template.setValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">    &#x2F;&#x2F; Hash key序列化</span><br><span class="line">    template.setHashKeySerializer(jackson2JsonRedisSerializer);</span><br><span class="line">    &#x2F;&#x2F; Hash value序列化</span><br><span class="line">    template.setHashValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">    template.setConnectionFactory(redisConnectionFactory());</span><br><span class="line">    template.afterPropertiesSet();</span><br><span class="line">    return template;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/redis/" rel="tag"># redis</a>
+              <a href="/tags/lettuce/" rel="tag"># lettuce</a>
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%B8%B8%E6%A0%87%E6%B5%8B%E8%AF%95/" rel="prev" title="Oracle游标测试">
+      <i class="fa fa-chevron-left"></i> Oracle游标测试
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景："><span class="nav-number">1.</span> <span class="nav-text">背景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备："><span class="nav-number">2.</span> <span class="nav-text">环境准备：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置集成："><span class="nav-number">3.</span> <span class="nav-text">配置集成：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Arber Chang"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Arber Chang</p>
+  <div class="site-description" itemprop="description">一个无聊喜欢搞点事情的软件工程师</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0FyYmVyQ2hhbmc=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ArberChang">GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjkwNDEwNTA3MkBxcS5jb20=" title="E-Mail → mailto:904105072@qq.com">E-Mail</span>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://b.wanty.cn/" title="https:&#x2F;&#x2F;b.wanty.cn">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Arber Chang</span>
+</div>
+  <div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量<span id="busuanzi_value_site_pv"></span>
+    </span>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+  <script pjax>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id: ,
+      el: 'wpac-rating',
+      color: 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://b.wanty.cn/%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/%E4%BB%A3%E7%A0%81/SpringCloud+Redis+Lettuce%E5%8D%95%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/',]
+      });
+      });
+  </script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el: '#valine-comments',
+      verify: false,
+      notify: true,
+      appId: 'kLzVPDM5m0lffGBD0YNBky4d-9Nh9j0Va',
+      appKey: 'MGLmOunidhFb6mhCaVc8eWEm',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar: 'mm',
+      meta: guest,
+      pageSize: '10' || 10,
+      visitor: true,
+      lang: 'zh-cn' || 'zh-cn',
+      path: location.pathname,
+      recordIP: true,
+      serverURLs: ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
