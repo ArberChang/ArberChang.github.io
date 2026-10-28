@@ -110,3 +110,7 @@ deploy:
   type: git
   repo: https://github.com/ArberChang/ArberChang.github.io.git
   branch: master
+
+# 原生图片延迟加载，替代主题已废弃的 lazyload 选项。
+marked:
+  lazyload: true
