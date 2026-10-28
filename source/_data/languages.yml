@@ -1,0 +1,5 @@
+# 使用 NexT 的语言合并机制，保留完整中文翻译。
+zh-CN:
+  menu:
+    photos: 相册
+    series: 专题
